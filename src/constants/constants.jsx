@@ -1,0 +1,7 @@
+export const SHIFT_START = {
+    MORNING_START: 7,
+    BRUNCH_START: 10,
+    EVENING_START: 15,
+    LATE_START: 18 ,
+    NIGHT_START :23,
+}

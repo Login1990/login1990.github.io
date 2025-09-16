@@ -1,103 +1,73 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { ProgressProvider } from '@bprogress/next/app';
+import ProgressBar from "@/components/ProgressBar";
+import Clock from "@/components/Clock"
+import { useUserTime } from '@/hooks/useUserTime';
+import { useEffect, useState } from 'react';
+import ProgressBarContainer from '@/components/ProgressBarContainer';
+import { SHIFT_START } from '@/constants/constants';
+
+export default function Page() { 
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  useEffect(() =>{
+    const interval = setInterval(()=>{
+        setRefreshKey(prev => rerenderChecker(prev))
+    }, 1000)
+   
+    return () => clearInterval(interval)
+  }, [])
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <ProgressBarContainer key={refreshKey}/>
+  )
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+}
+
+function rerenderChecker(refreshKey) {
+    const now = new Date();
+    let newRefreshKey = 0;
+
+    const morning_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.MORNING_START, 0, 0)
+    const morning_end = new Date(morning_start.getTime()+  8 * 60 * 60 * 1000)
+
+    const brunch_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.BRUNCH_START, 0, 0)
+    const brunch_end = new Date(brunch_start.getTime()+  8 * 60 * 60 * 1000)
+
+    const evening_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.EVENING_START, 0, 0)
+    const evening_end = new Date(evening_start.getTime()+  8 * 60 * 60 * 1000)
+
+    const late_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.LATE_START, 0, 0)
+    const late_end = new Date(late_start.getTime()+  8 * 60 * 60 * 1000)
+
+    const night_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.LATE_START, 0, 0)
+    const night_end = new Date(night_start.getTime()+  8 * 60 * 60 * 1000)
+
+    if (now > morning_start && now < morning_end) {
+        newRefreshKey += 1
+    }
+
+    if (now > brunch_start && now < brunch_end) {
+        newRefreshKey += 1
+    }
+    
+    if (now > evening_start && now < evening_end) {
+        newRefreshKey += 1
+    } 
+
+    if (now > late_start && now < late_end) {
+        newRefreshKey += 1
+    } 
+
+    if (now > night_start && now < night_end) {
+        newRefreshKey += 1
+    } 
+
+    if (newRefreshKey == 0) {
+        return refreshKey
+    } else {
+        return newRefreshKey
+    }
+        
 }
