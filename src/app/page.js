@@ -37,37 +37,48 @@ function rerenderChecker(refreshKey) {
 
     const evening_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.EVENING_START, 0, 0)
     const evening_end = new Date(evening_start.getTime()+  8 * 60 * 60 * 1000)
-
-    const late_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.LATE_START, 0, 0)
-    const late_end = new Date(late_start.getTime()+  8 * 60 * 60 * 1000)
-
-    const night_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.LATE_START, 0, 0)
-    const night_end = new Date(night_start.getTime()+  8 * 60 * 60 * 1000)
-
-    if (now > morning_start && now < morning_end) {
-        newRefreshKey += 1
-    }
-
-    if (now > brunch_start && now < brunch_end) {
-        newRefreshKey += 1
-    }
     
-    if (now > evening_start && now < evening_end) {
-        newRefreshKey += 1
-    } 
+    let late_start
+    let late_end
 
-    if (now > late_start && now < late_end) {
-        newRefreshKey += 1
-    } 
+    let night_start
+    let night_end
 
-    if (now > night_start && now < night_end) {
-        newRefreshKey += 1
-    } 
+    if (now.getHours() <= 7){
+        late_start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, SHIFT_START.LATE_START, 0, 0)
+        late_end = new Date(late_start.getTime()+  8 * 60 * 60 * 1000)
 
-    if (newRefreshKey == 0) {
-        return refreshKey
+        night_start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, SHIFT_START.NIGHT_START, 0, 0)
+        night_end = new Date(night_start.getTime()+  8 * 60 * 60 * 1000)
+        
+
     } else {
-        return newRefreshKey
+        late_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.LATE_START, 0, 0)
+        late_end = new Date(late_start.getTime()+  8 * 60 * 60 * 1000)
+
+        night_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.NIGHT_START, 0, 0)
+        night_end = new Date(night_start.getTime()+  8 * 60 * 60 * 1000)
+    }
+
+
+    if (now.getHours() == SHIFT_START.MORNING_START && now.getMinutes() == 0){
+        return refreshKey + 1
+    }
+
+    if (now.getHours() == SHIFT_START.BRUNCH_START && now.getMinutes() == 0){
+        return refreshKey + 1
+    }
+
+    if (now.getHours() == SHIFT_START.EVENING_START && now.getMinutes() == 0){
+        return refreshKey + 1
+    }
+
+    if (now.getHours() == SHIFT_START.LATE_START && now.getMinutes() == 0){
+        return refreshKey + 1
+    }
+
+    if (now.getHours() == SHIFT_START.NIGHT_START && now.getMinutes() == 0){
+        return refreshKey + 1
     }
         
 }

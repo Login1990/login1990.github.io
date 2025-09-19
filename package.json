@@ -2,11 +2,13 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://login1990.github.io",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy": "next build && git subtree push --prefix out origin gh-pages"
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",

@@ -14,11 +14,27 @@ export default function ProgressBarContainer() {
     const evening_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.EVENING_START, 0, 0)
     const evening_end = new Date(evening_start.getTime()+  8 * 60 * 60 * 1000)
 
-    const late_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.LATE_START, 0, 0)
-    const late_end = new Date(late_start.getTime()+  8 * 60 * 60 * 1000)
+    let late_start
+    let late_end
 
-    const night_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.NIGHT_START, 0, 0)
-    const night_end = new Date(night_start.getTime()+  8 * 60 * 60 * 1000)
+    let night_start
+    let night_end
+
+    if (now.getHours() <= 7){
+        late_start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, SHIFT_START.LATE_START, 0, 0)
+        late_end = new Date(late_start.getTime()+  8 * 60 * 60 * 1000)
+
+        night_start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, SHIFT_START.NIGHT_START, 0, 0)
+        night_end = new Date(night_start.getTime()+  8 * 60 * 60 * 1000)
+        
+
+    } else {
+        late_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.LATE_START, 0, 0)
+        late_end = new Date(late_start.getTime()+  8 * 60 * 60 * 1000)
+
+        night_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.NIGHT_START, 0, 0)
+        night_end = new Date(night_start.getTime()+  8 * 60 * 60 * 1000)
+    }
 
     const data = [
         {type: "Morning", start: morning_start, end: morning_end},
