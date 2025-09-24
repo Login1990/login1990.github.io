@@ -46,7 +46,7 @@ export default function RegressBar({ start, end, name, color}) {
   },[])
   console.log(name)
   return (
-    <div className="bg-gray-200 rounded-xl m-4 overflow-hidden flex-1 max-h-50 min-h-5 relative"> 
+    <div className="bg-gray-200 rounded-xl m-4 overflow-hidden flex-1 max-h-50 min-h-5 relative hide-on-small-parent"> 
       <div className="hide-on-small-parent absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 text-black font-bold">
         Get ready for: {name}
       </div>
