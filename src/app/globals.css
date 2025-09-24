@@ -3,6 +3,12 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-morning: #82c91e;
+  --color-brunch: #fbc02d;
+  --color-afternoon: #fd7e14;
+  --color-evening: #15aabf;
+  --color-late: #be4bdb;
+  --color-night: #7950f2;
 }
 
 @theme inline {
@@ -12,10 +18,25 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@theme {
+  --color-morning: #82c91e;
+  --color-brunch: #fbc02d;
+  --color-afternoon: #fd7e14;
+  --color-evening: #15aabf;
+  --color-late: #be4bdb;
+  --color-night: #7950f2;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+  }
+}
+
+@media (max-height: 600px) {
+  .hide-on-small-parent {
+    display: none;
   }
 }
 

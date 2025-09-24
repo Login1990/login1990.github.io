@@ -1,8 +1,8 @@
 import ProgressBar from "@/components/ProgressBar";
-import { SHIFT_START } from "@/constants/constants";
+import { SHIFT_COLOR, SHIFT_START, TIME_BUFFER } from "@/constants/constants";
+import RegressBar from "./RegressBar";
 
 export default function ProgressBarContainer() {
-    console.log('hello')
     const now = new Date();
 
     const morning_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.MORNING_START, 0, 0)
@@ -10,6 +10,9 @@ export default function ProgressBarContainer() {
 
     const brunch_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.BRUNCH_START, 0, 0)
     const brunch_end = new Date(brunch_start.getTime()+  8 * 60 * 60 * 1000)
+
+    const afternoon_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.AFTERNOON_START, 0, 0)
+    const afternoon_end = new Date(brunch_start.getTime()+  8 * 60 * 60 * 1000)
 
     const evening_start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SHIFT_START.EVENING_START, 0, 0)
     const evening_end = new Date(evening_start.getTime()+  8 * 60 * 60 * 1000)
@@ -37,25 +40,34 @@ export default function ProgressBarContainer() {
     }
 
     const data = [
-        {type: "Morning", start: morning_start, end: morning_end},
-        {type: "Brunch", start: brunch_start, end: brunch_end},
-        {type: "Evening", start: evening_start, end: evening_end},
-        {type: "Late", start: late_start, end: late_end},
-        {type: "Night", start: night_start, end: night_end},
+        {type: "Morning", start: morning_start, end: morning_end, color: "morning"},
+        {type: "Brunch", start: brunch_start, end: brunch_end, color: "brunch"},
+        {type: "Afternoon", start: afternoon_start, end: afternoon_end, color: "afternoon"},
+        {type: "Evening", start: evening_start, end: evening_end, color: "evening"},
+        {type: "Late", start: late_start, end: late_end, color: "late"},
+        {type: "Night", start: night_start, end: night_end, color: "night"},
     ]
 
-    const componentsToRender = data
+    const progressBarsToRender = data
+        .filter(item => now > item.start && now < item.end)
         .map((item, index) => {
-            if (now > item.start && now < item.end) return <ProgressBar key={index} start={item.start} end={item.end} name={item.type}/>
+            return <ProgressBar key={`progress${index}`} start={item.start} end={item.end} name={item.type} color={item.color}/>
+        })
+    
+    const regressBarsToRender = data
+        .filter(item => now > item.start - TIME_BUFFER && now < item.start)
+        .map((item, index) => {
+            return <RegressBar key={`regress${index}`} start={new Date(item.start - TIME_BUFFER)} end={item.start} name={item.type} color={item.color}/>
         })
 
-    if (componentsToRender.length == 0){
-        return <p>Something went terribly wrong...</p>
-    }   
+    if (progressBarsToRender.length == 0){
+        return <p>Your business is closed.</p>
+    }
 
     return (
         <div className='flex flex-col justify-center h-[95%]'>
-            {componentsToRender}
+            {progressBarsToRender}
+            {regressBarsToRender}
         </div>
     )
 }
